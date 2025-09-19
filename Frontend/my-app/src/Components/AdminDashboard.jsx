@@ -250,6 +250,13 @@ export default function AdminDashboard() {
     }
   }
 
+  // Determine blockchain status
+  const isAnyElectionEnded = elections.some(e => e.phase === "ended");
+  const blockchainStatus = isAnyElectionEnded ? "Offline" : "Online";
+  const blockchainStatusColor = isAnyElectionEnded ? "text-red-600" : "text-green-600";
+  const blockchainDotColor = isAnyElectionEnded ? "bg-red-500" : "bg-green-500";
+  const blockchainStatusText = isAnyElectionEnded ? "Stopped" : "Running";
+
   return (
     <div className="min-h-screen bg-white/10 text-gray-800">
       {/* Sidebar */}
@@ -359,10 +366,10 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-500 text-sm font-montserrat mb-4">Blockchain Status</p>
-                    <p className="text-2xl font-bold text-green-600 font-montserrat">Online</p>
+                    <p className={`text-2xl font-bold ${blockchainStatusColor} font-montserrat`}>{blockchainStatus}</p>
                     <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-green-600 text-sm font-montserrat">Running</span>
+                      <div className={`w-2 h-2 ${blockchainDotColor} rounded-full`}></div>
+                      <span className={`${blockchainStatusColor} text-sm font-montserrat`}>{blockchainStatusText}</span>
                     </div>
                   </div>
                   <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center -translate-y-12 translate-x-4">

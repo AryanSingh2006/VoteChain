@@ -20,7 +20,7 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    phone_number: "",
+    phone_number: "+91", // Default value
     voter_id: "",
     userWalletAddress: "",
   });
@@ -49,7 +49,16 @@ export default function Register() {
   };
 
   const handleChange = async (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "phone_number") {
+      // Always start with "+91 "
+      let input = value.replace(/^\+?91\s?/, ""); // Remove any leading +91 or +91 
+      // Allow only digits and max 10 numbers
+      input = input.replace(/\D/g, "").slice(0, 10);
+      setForm({ ...form, phone_number: "+91 " + input });
+    } else {
+      setForm({ ...form, [name]: value });
+    }
   };
 
   // NEW: verify voter ID against mock API and auto-fill name
@@ -200,6 +209,7 @@ export default function Register() {
                   value={form.phone_number}
                   onChange={handleChange}
                   required
+                  maxLength={14} // "+91 " + 10 digits = 14 chars
                   className="w-full border border-gray-300 focus:border-[#8B5CF6] focus:ring-0 focus:outline-none px-3 py-2 rounded-full"
                 />
               </div>
