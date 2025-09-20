@@ -1,6 +1,48 @@
 import { ArrowRight } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 
 export default function VotingAccessibilityLanding() {
+  const [scrollY, setScrollY] = useState(0)
+  const titleRef = useRef(null)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Split text into words for animation
+  const titleText = "Making Voting Accessible for All. Our platform empowers citizens with inclusive tools like voice navigation, haptic feedback, and large text mode to ensure every vote counts regardless of ability or device."
+  const words = titleText.split(' ')
+
+  // Calculate which words should be colored based on scroll
+  const getWordColor = (index) => {
+    const element = titleRef.current
+    if (!element) return 'text-muted-foreground'
+    
+    const rect = element.getBoundingClientRect()
+    const elementTop = rect.top + window.scrollY
+    const elementHeight = rect.height
+    
+    // Start animation when element is in viewport
+    const scrollProgress = Math.max(0, scrollY - elementTop + window.innerHeight * 0.7)
+    const maxProgress = elementHeight + window.innerHeight * 0.3
+    const progress = Math.min(1, scrollProgress / maxProgress)
+    
+    // Calculate which word should be highlighted based on progress
+    const wordsToHighlight = Math.floor(progress * words.length)
+    
+    if (index < wordsToHighlight) {
+      return 'text-foreground'
+    } else if (index === wordsToHighlight) {
+      // Add a smooth transition effect for the current word
+      return 'text-foreground animate-pulse'
+    }
+    return 'text-muted-foreground/60'
+  }
   return (
     <main className="bg-background">
       <section className="max-w-7xl mx-auto px-6 py-5">
@@ -22,12 +64,22 @@ export default function VotingAccessibilityLanding() {
 
         {/* Main Content */}
         <div className="mb-12">
-          <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold text-foreground leading-tight text-balance mb-8 max-w-7xl">
-            Making Voting Accessible for All. <br />
-            Our platform empowers citizens with inclusive tools like voice
-            navigation, haptic feedback, and large text mode to ensure every
-            vote counts regardless of ability or device.
-          </h1>
+            <h1 
+          ref={titleRef}
+          className="text-4xl md:text-5xl lg:text-5xl font-bold leading-tight text-balance mb-8 max-w-7xl"
+        >
+          {words.map((word, index) => (
+            <span
+              key={index}
+              className={`${getWordColor(index)} transition-all duration-500 ease-out inline-block mr-2 mb-2`}
+              style={{
+                transitionDelay: `${index * 20}ms`,
+              }}
+            >
+              {word}
+            </span>
+          ))}
+        </h1>
         </div>
 
         {/* Images and Statistics Section */}

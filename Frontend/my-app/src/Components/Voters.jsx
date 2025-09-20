@@ -90,7 +90,7 @@ export function MemberAdminDashboard() {
   const [hoveredRow, setHoveredRow] = useState(null);
 
   const sidebarItems = [
-    { icon: Clipboard, label: "Dashboard", route: "/dashboard", active: false },
+    { icon: Clipboard, label: "Dashboard", route: "/admin", active: false },
     { icon: Wallet, label: "Elections", route: "/election", active: false },
     { icon: Vote, label: "Voters", route: "/voters", active: true }, // Voters page active
     // Add more items as needed

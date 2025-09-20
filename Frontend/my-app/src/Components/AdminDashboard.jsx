@@ -184,7 +184,7 @@ export default function AdminDashboard() {
   ]
 
   const sidebarItems = [
-    { icon: Clipboard, label: "Dashboard", route: "/dashboard", active: true },
+    { icon: Clipboard, label: "Dashboard", route: "/admin", active: true },
     { icon: Wallet, label: "Elections", route: "/election" }, // Elections page
     { icon: Vote, label: "Voters", route: "/voters" },         // Voters page
     // Add more items as needed

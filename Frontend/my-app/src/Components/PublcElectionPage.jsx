@@ -9,7 +9,19 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import axios from "axios"
 
+
 export default function IntegratedHomePage() {
+  const [fontSize, setFontSize] = useState(16); // default font size in px
+
+  // Apply font size globally to <html>
+  useEffect(() => {
+    document.documentElement.style.fontSize = fontSize + "px";
+  }, [fontSize]);
+
+  const increaseFont = () => setFontSize((prev) => prev + 2);
+  const decreaseFont = () => setFontSize((prev) => (prev > 10 ? prev - 2 : prev));
+
+
   const [phase, setPhase] = useState("Loading...")
   const [title, setTitle] = useState("")
 
@@ -42,7 +54,7 @@ export default function IntegratedHomePage() {
 
   return (
     <>
-      <nav className="w-full bg-white px-4 py-3">
+      <nav  className="w-full bg-white px-4 py-3">
         <div className="container mx-auto flex items-center justify-between">
           {/* Left Side - Logo and Branding */}
           <div className="flex items-center gap-4">
@@ -66,9 +78,33 @@ export default function IntegratedHomePage() {
           <div className="flex items-center gap-4 md:gap-6">
             {/* Language Toggle */}
             <div className="flex items-center gap-3 text-sm md:text-base">
-              <button className="text-gray-700 hover:text-gray-900 font-medium transition-colors">English</button>
-              <div className="w-px h-4 bg-gray-300"></div>
-              <button className="text-gray-700 hover:text-gray-900 font-medium transition-colors">हिंदी</button>
+               <button
+      onClick={() => {
+        const select = document.querySelector(".goog-te-combo");
+        if (select) {
+          select.value = "en";
+          select.dispatchEvent(new Event("change"));
+        }
+      }}
+      className="text-gray-700 hover:text-gray-900 font-medium transition-colors"
+    >
+      English
+    </button>
+
+    <div className="w-px h-4 bg-gray-300"></div>
+
+    <button
+      onClick={() => {
+        const select = document.querySelector(".goog-te-combo");
+        if (select) {
+          select.value = "hi";
+          select.dispatchEvent(new Event("change"));
+        }
+      }}
+      className="text-gray-700 hover:text-gray-900 font-medium transition-colors"
+    >
+      हिंदी
+    </button>
             </div>
 
             <Link to="/login">
@@ -84,6 +120,21 @@ export default function IntegratedHomePage() {
                 </button>
               </Link>
             )}
+
+     <div className="flex items-center gap-2">
+        <button
+          onClick={decreaseFont}
+          className="px-3 py-2 border rounded-full hover:bg-gray-100"
+        >
+          A-
+        </button>
+        <button
+          onClick={increaseFont}
+          className="px-3 py-2 border rounded-full hover:bg-gray-100"
+        >
+          A+
+        </button>
+        </div>
           </div>
         </div>
       </nav>
