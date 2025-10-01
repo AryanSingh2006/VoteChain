@@ -26,18 +26,14 @@ app.use((req, res, next) => {
   next();
 });
 
-
-// CORS configuration: permissive mode can be enabled with ENABLE_PERMISSIVE_CORS=true
 const ENABLE_PERMISSIVE_CORS = process.env.ENABLE_PERMISSIVE_CORS === 'true';
 
 if (ENABLE_PERMISSIVE_CORS) {
   console.warn('CORS: permissive mode enabled — allowing all origins (for testing only)');
   app.use(cors({ origin: true, credentials: true, methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"] }));
 } else {
-  // Use explicit allowlist from CORS_ORIGIN
   app.use(cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (curl, server-to-server)
       if (!origin) return callback(null, true);
 
       const allowed = Array.isArray(CORS_ORIGIN) ? CORS_ORIGIN : [CORS_ORIGIN];

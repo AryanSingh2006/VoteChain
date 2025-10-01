@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../constants.JS";
+import axios from "axios"
 
 export default function CandidateRegister() {
   const navigate = useNavigate();
@@ -83,25 +84,32 @@ export default function CandidateRegister() {
       formDataToSend.append("candidateWalletAddress", walletAddress);
       formDataToSend.append("logo", logo);
 
-      const response = await fetch(`/candidate/register`, {
-        method: "POST",
-        body: formDataToSend,
-        credentials: "include",
+      const response = await axios.post("/candidate/register", formDataToSend, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage("✅ " + data.message);
+      const msg = response.data.message || "Registration successful";
+      const isSuccess = response.status === 200 || response.status === 201;
+      let displayMsg = msg;
+      if (!msg.startsWith("✅") && !msg.startsWith("❌")) {
+        displayMsg = (isSuccess ? "✅ " : "❌ ") + msg;
+      }
+      setMessage(displayMsg);
+      if (isSuccess) {
         setFormData({ name: "", party: "", slogan: "" });
         setWalletAddress("");
         setLogo(null);
         setTimeout(() => navigate("/"), 2000);
-      } else {
-        setMessage("❌ " + (data.message || "Registration failed"));
       }
     } catch (error) {
-      setMessage("❌ Error: " + error.message);
+      if (error.response && error.response.data && error.response.data.message) {
+        setMessage("❌ Error: " + error.response.data.message);
+      } else {
+        setMessage("❌ Error: " + error.message);
+      }
     } finally {
       setLoading(false);
     }

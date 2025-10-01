@@ -14,9 +14,8 @@ import VoiceAssistantOverlay from "./VoiceAssistantOverlay"
 
 
 export default function IntegratedHomePage() {
-  const [fontSize, setFontSize] = useState(16); // default font size in px
+  const [fontSize, setFontSize] = useState(16);
 
-  // Apply font size globally to <html>
   useEffect(() => {
     document.documentElement.style.fontSize = fontSize + "px";
   }, [fontSize]);
@@ -59,7 +58,6 @@ export default function IntegratedHomePage() {
 
   const speakPage = (lang) => {
     if (window.speechSynthesis.speaking && speakingLang === lang) {
-      // 🔴 If already speaking in this language → stop it
       window.speechSynthesis.cancel();
       setSpeakingLang(null);
       return;

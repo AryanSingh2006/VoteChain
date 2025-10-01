@@ -5,7 +5,6 @@ console.log("🚀 Simple cron job starting...");
 
 // Check every 30 seconds for testing
 const job = cron.schedule("*/30 * * * * *", async () => {
-  console.log("🔍 Checking elections...", new Date().toLocaleString());
 
   try {
     // Get current time
